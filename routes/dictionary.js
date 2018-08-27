@@ -8,12 +8,16 @@ const validator = Validator({})
 
 
 router.post('/', validator.body(addWordSchema), async (req, res, next) => {
-    const word = await addNewWord(req.body)
-    res.json(word)
+    try {
+        const word = await addNewWord(req.body)
+        res.json(word)
+    } catch (err) {
+        return next(err)
+    }
 })
 
-router.get('/:keyword', validator.params(keywordParam), async (req, res, next) => {
-    const resultList = await searchByKeyword(req.params.keyword)
+router.get('/:keyword/:lang', validator.params(keywordParam), async (req, res, next) => {
+    const resultList = await searchByKeyword(req.params.keyword, req.params.lang)
     res.json(resultList)
 })
 

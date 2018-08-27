@@ -3,11 +3,7 @@ mongoose.Promise = Promise
 
 const NounPropsSchema = new mongoose.Schema({
     article:String,
-    plural:String,
-    nominative_example:String,
-    accusative_example:String,
-    dative_example:String,
-    genitive_example:String
+    plural:String
 })
 
 const ConjugationSchema = new mongoose.Schema({
@@ -22,9 +18,16 @@ const VerbPropsSchema = new mongoose.Schema({
 })
 
 
+const TranslationSchema = new mongoose.Schema({
+    lang:{ type: String, enum: ['es', 'en', 'fr', 'jp', 'ru'] },
+    translation:String,
+    description:String
+})
+
+
 const DictionarySchema = new mongoose.Schema({
     word:String,
-    translation:String,
+    translations:[TranslationSchema],
     searchKey:String,
     word:String,
     type: { type: String, enum: ['noun', 'verb', 'modal_verb', 'local_preposition'] },

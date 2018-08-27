@@ -10,6 +10,7 @@ import _ from 'lodash'
 var app = require('../app')
 var debug = require('debug')('proto-share-api:server')
 var http = require('http')
+var cors = require('cors')
 
 dotenv.config();
 
@@ -24,7 +25,8 @@ mongoose.connect(process.env.MONGO_DB)
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = 7000;
+console.log(port)
 app.set('port', port);
 
 /**
@@ -98,12 +100,14 @@ function onListening() {
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  console.log('Listening on ' + bind);
 }
 
 /**
  * Error middleware
  */
+
+app.use(cors())
 
 app.use((err, req, res, next) => {
 
