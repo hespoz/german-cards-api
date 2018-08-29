@@ -1,12 +1,16 @@
 import Joi from 'joi'
-import mongoose from "mongoose";
 
 Joi.objectId = require('joi-objectid')(Joi)
 
+export const updateTranslationsSchema =Joi.object().keys({
+    id:Joi.objectId().required(),
+    lang: Joi.string().valid('de', 'es', 'en', 'fr', 'it', 'ru').required(),
+    translation: Joi.array().items(Joi.string()).required()
+}).required()
+
 const translationListSchema = Joi.array().items(Joi.object().keys({
-    lang: Joi.string().valid('de', 'es', 'en', 'fr', 'jp', 'ru').required(),
-    translation: Joi.array().items(Joi.string()).required(),
-    description: Joi.string()
+    lang: Joi.string().valid('de', 'es', 'en', 'fr', 'it', 'ru').required(),
+    translation: Joi.array().items(Joi.string()).required()
 })).required()
 
 export const addWordSchema = Joi.object({
@@ -25,6 +29,6 @@ export const addWordSchema = Joi.object({
 
 export const keywordParam = Joi.object({
     keyword: Joi.string().required(),
-    lang: Joi.string().valid('de', 'es', 'en', 'fr', 'jp', 'ru').required()
+    exact: Joi.boolean().required()
 })
 
