@@ -2,22 +2,23 @@ import {Dictionary} from "../models/dictionary";
 
 
 export const searchByKeyword = async (keyword, lang) => {
-    let results = []
 
-    if(lang === "de"){
-        results = await Dictionary.find({searchKey: { $regex: `^${keyword}.*`, $options: 'i' } })
-    } else {
-        results = await Dictionary.find({'translations':   {$elemMatch: { lang:`${lang}`, translation:{ $regex: `^${keyword}.*`, $options: 'i'}}} })
-    }
+    return await Dictionary.find({
+        $or: [{
+            searchKey: {
+                $regex: `^${keyword}.*`,
+                $options: 'i'
+            }
+        }, {'translations': {$elemMatch: {translation: {$regex: `^${keyword}.*`, $options: 'i'}}}}]
+    })
 
-    return results
 }
 
 export const addNewWord = async (word) => {
 
-    const result = await Dictionary.find({word: word.word }).limit(1)
+    const result = await Dictionary.find({word: word.word}).limit(1)
 
-    if(result.length > 0){
+    if (result.length > 0) {
         throw new Error("This word is already added")
     }
 

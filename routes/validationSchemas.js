@@ -1,29 +1,25 @@
 import Joi from 'joi'
+import mongoose from "mongoose";
 
 Joi.objectId = require('joi-objectid')(Joi)
 
 const translationListSchema = Joi.array().items(Joi.object().keys({
     lang: Joi.string().valid('de', 'es', 'en', 'fr', 'jp', 'ru').required(),
-    translation: Joi.string().required(),
+    translation: Joi.array().items(Joi.string()).required(),
     description: Joi.string()
 })).required()
 
 export const addWordSchema = Joi.object({
     word: Joi.string().required(),
-    translations: translationListSchema,
-    searchKey: Joi.string().required(),
+    plural: Joi.string(),
+    article: Joi.string(),
+    perfect: Joi.string(),
     type: Joi.string().valid('noun', 'verb', 'modal_verb', 'local_preposition').required(),
-    nounProps:Joi.object().keys({
-        article: Joi.string().required(),
-        plural: Joi.string().required()
-    }).optional(),
-    verbProps: Joi.object().keys({
-        perfect: Joi.string().required(),
-        conjugation_present: Joi.array().items(Joi.object().keys({
-            pronoum: Joi.string().valid('ich', 'du', 'es', 'sie', 'er', 'ihr', 'Sie', 'wir').required(),
-            conjugation: Joi.string().required()
-        }))
-    }).default({})
+    translations: translationListSchema,
+    conjugation_present: Joi.array().items(Joi.object().keys({
+        pronoum: Joi.string().valid('ich', 'du', 'es', 'sie', 'er', 'ihr', 'Sie', 'wir').required(),
+        conjugation: Joi.string().required()
+    }))
 })
 
 
