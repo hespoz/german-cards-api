@@ -7,37 +7,54 @@ export const addTranslation = async (body) => {
         translation: body.translation
     })
 
-    await Dictionary.update({ _id: body.id }, word, { multi: false })
+    await Dictionary.update({_id: body.id}, word, {multi: false})
     return word
 }
 
 export const searchByKeyword = async (keyword, exact) => {
 
-    const query = exact ? `${keyword}` : `^${keyword}.*`
+    if (exact) {
 
-    let searchQuery = {$or: [{
-        word: {
-            $regex: query,
-            $options: 'i'
+        let searchQuery = {
+            $or: [{
+                word: keyword
+            }, {
+                plural: keyword
+            }, {
+                perfect: keyword
+            }]
         }
-    }, {
-        plural: {
-            $regex: query,
-            $options: 'i'
-        }
-    }, {
-        perfect: {
-            $regex: query,
-            $options: 'i'
-        }
-    }]}
 
+        return await Dictionary.findOne(searchQuery)
 
-    if (!exact) {
-        searchQuery.$or.push({'translations': {$elemMatch: {translation: {$regex: query, $options: 'i'}}}})
+    } else {
+        let searchQuery = {
+            $or: [{
+                word: {
+                    $regex: `^${keyword}.*`,
+                    $options: 'i'
+                }
+            }, {
+                plural: {
+                    $regex: `^${keyword}.*`,
+                    $options: 'i'
+                }
+            }, {
+                perfect: {
+                    $regex: `^${keyword}.*`,
+                    $options: 'i'
+                }
+            },
+                {'translations': {$elemMatch: {translation: {$regex: `^${keyword}.*`, $options: 'i'}}}}
+            ]
+        }
+
+        return await Dictionary.find(searchQuery)
+
     }
 
-    return await Dictionary.find(searchQuery)
+
+
 
 }
 

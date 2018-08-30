@@ -26,7 +26,7 @@ router.put('/', validator.body(updateTranslationsSchema), async (req, res, next)
 })
 
 router.get('/:keyword/:exact', validator.params(keywordParam), async (req, res, next) => {
-    const resultList = await searchByKeyword(req.params.keyword)
+    const resultList = await searchByKeyword(req.params.keyword,req.params.exact)
     res.json(resultList)
 })
 
