@@ -21,7 +21,7 @@ export const addWordSchema = Joi.object({
     type: Joi.string().valid('noun', 'verb', 'modal_verb', 'local_preposition').required(),
     translations: translationListSchema,
     conjugation_present: Joi.array().items(Joi.object().keys({
-        pronoum: Joi.string().valid('ich', 'du', 'es', 'sie', 'er', 'ihr', 'Sie', 'wir').required(),
+        pronoun: Joi.string().valid('ich', 'du', 'er/sie/es', 'ihr', 'Sie', 'wir').required(),
         conjugation: Joi.string().required()
     }))
 })

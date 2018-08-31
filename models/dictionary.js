@@ -3,7 +3,7 @@ mongoose.Promise = Promise
 
 
 const ConjugationSchema = new mongoose.Schema({
-    pronoum:String,
+    pronoun:String,
     conjugation:String,
     translation:String
 })
